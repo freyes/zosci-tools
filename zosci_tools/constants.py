@@ -1,7 +1,7 @@
 import os
 
 APP_NAME = 'zosci-tools'
-USER_AGENT = os.environ.get('ZOSCI_TOOLS_USER_AGENT', 'zosci-tools/0.1')
+USER_AGENT = os.environ.get('ZOSCI_TOOLS_USER_AGENT', f'{APP_NAME}/0.1')
 CACHE_DIR = os.environ.get('ZOSCI_TOOLS_CACHE_DIR',
                            os.path.expanduser('~/.cache/zosci-tools/'))
 OSCI_YAML = 'osci.yaml'
