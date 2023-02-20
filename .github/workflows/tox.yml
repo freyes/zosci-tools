@@ -27,6 +27,11 @@ jobs:
         python -m pip install tox tox-gh-actions
     - name: Test with python ${{ matrix.python-version }}
       run: tox -e py3
+    - uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
   lint:
     runs-on: ubuntu-latest
     strategy:
