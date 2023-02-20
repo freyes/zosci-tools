@@ -86,8 +86,8 @@ def sync(ctxt, i_really_mean_it, repo_dir):
         gc.load_files(lp_builder_configs)
 
     if not list(gc.projects()):
-        logger.error('No projects found; '
-                     'are you sure the path is correct?: %s', config_dir)
+        click.echo('No projects found; '
+                   'are you sure the path is correct?: %s', config_dir)
         sys.exit(1)
 
     git_repo = git.Repo(repo_dir, search_parent_directories=True)
@@ -102,7 +102,9 @@ def sync(ctxt, i_really_mean_it, repo_dir):
 
         charm_name = section['project']['vars']['charm_build_name']
         if not list(gc.projects(select=[charm_name])):
-            print('No charms found; are you sure the arguments are correct')
+            click.echo(
+                'No charms found; are you sure the arguments are correct'
+            )
             sys.exit(1)
 
         charm_project = list(gc.projects(select=[charm_name]))[0]
@@ -118,9 +120,9 @@ def sync(ctxt, i_really_mean_it, repo_dir):
                 charm_project.lp_project)
             try:
                 lp_recipe = [r for r in recipes if r.name == recipe_name][0]
-                print('Using recipe %s' % lp_recipe.web_link)
+                click.echo('Using recipe %s' % lp_recipe.web_link)
             except IndexError:
-                print('Recipe %s not found' % recipe_name)
+                click.echo('Recipe %s not found' % recipe_name)
                 sys.exit(2)
 
             # TODO(freyes): extend this code to handle multiple auto build
@@ -133,14 +135,14 @@ def sync(ctxt, i_really_mean_it, repo_dir):
 
             auto_build_channels = lp_recipe.auto_build_channels
             if auto_build_channels.get('charmcraft') != charmcraft_chan:
-                print('Updating charmcraft channel from %s to %s' %
-                      (auto_build_channels.get('charmcraft'),
-                       charmcraft_chan))
+                click.echo('Updating charmcraft channel from %s to %s' %
+                           (auto_build_channels.get('charmcraft'),
+                            charmcraft_chan))
                 if i_really_mean_it:
                     auto_build_channels['charmcraft'] = charmcraft_chan
                     lp_recipe.auto_build_channels = auto_build_channels
                     lp_recipe.lp_save()
                 else:
-                    print('Dry-run mode: NOT committing the change.')
+                    click.echo('Dry-run mode: NOT committing the change.')
             else:
-                print('Recipe auto build channels already in sync')
+                click.echo('Recipe auto build channels already in sync')
